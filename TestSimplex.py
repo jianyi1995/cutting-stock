@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest import main
 from Simplex import Simplex
+from fractions import Fraction
 
 
 class TestSimplex(TestCase):
@@ -12,13 +13,13 @@ class TestSimplex(TestCase):
             for i in range(m):
                 tmp = f.readline().split()
                 for j in range(n):
-                    a[i][j] = int(tmp[j])
+                    a[i][j] = Fraction(tmp[j])
             b = []
             for i in range(m):
-                b.append(int(f.readline().split()[0]))
+                b.append(Fraction(f.readline().split()[0]))
             c = []
             for j in range(n):
-                c.append(int(f.readline().split()[0]))
+                c.append(Fraction(f.readline().split()[0]))
         s = Simplex(m, n, a, b, c)
         result = [[2, 3, 1, 0, 0, 0, 6], [-3, 2, 0, 1, 0, 0, 3], [0, 2, 0, 0, 1, 0, 5],
                   [2, 1, 0, 0, 0, 1, 4], [-4, -3, 0, 0, 0, 0, 0]]
