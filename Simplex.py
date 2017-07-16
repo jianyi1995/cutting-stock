@@ -2,7 +2,7 @@
 this class using Simplex Algorithm to solve standard maximum linear problem
 for the minimum problem, we multiply -1 to responding coefficient
 """
-
+from fractions import Fraction
 
 class Simplex:
     # m means the number of constraints
@@ -14,9 +14,10 @@ class Simplex:
     def __init__(self, m, n, a, b, c, t=1):
         self._m = m
         self._n = n
-        self._a = a * t
-        self._b = b * t
-        self._c = c * t
+        self._a = a.copy() * t
+        self._b = b.copy * t
+        self._c = c.copy * t
+        self._tableau = None
 
     def create_tableau(self):
         tableau = [[0 for x in range(self._m + self._n + 1)] for y in range(self._m + 1)]
@@ -27,7 +28,10 @@ class Simplex:
             tableau[i][self._m + self._n] = self._b[i]
         for j in range(self._n):
             tableau[self._m][j] = self._c[j]
+        self._tableau = tableau
         return tableau
+
+
 
 
 
