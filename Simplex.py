@@ -57,7 +57,7 @@ class Simplex:
             if i == row:
                 continue
             mul = Fraction(tableau[i][column] / tableau[row][column])
-            for j in range(self.m + self._n + 1):
+            for j in range(self._m + self._n + 1):
                 tableau[i][j] = tableau[i][j] - tableau[row][j] * mul
         return tableau
 
