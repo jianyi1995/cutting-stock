@@ -62,7 +62,30 @@ class Simplex:
                 tableau[i][j] = tableau[i][j] - tableau[row][j] * mul
         return tableau
 
-
+    def simplex(self):
+        tableau = self.create_tableau()
+        while True:
+            row, column = self.get_pivot(tableau)
+            if column == -1:
+                print('get the optimal solution\n')
+                result = [0] * self._n
+                for i in self._solution:
+                    if i < self._n:
+                        result[i] = tableau[self._solution.index(i)][self._n + self._m]
+                print(result)
+                optimal = 0
+                for i in range(self._n):
+                    optimal += self._c[i] * -1 * result[i]
+                print('optimal is %d' % optimal)
+                break
+            elif row == -1:
+                print('it is infeasible\n')
+                result = None
+                break
+            else:
+                self._solution[row] = column
+                self.pivot(tableau, row, column)
+        return result
 
 
 
