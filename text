@@ -1,3 +1,4 @@
+1     # 1 means max, -1 means min
 4     # the number of constraints
 2     # the number of variables
 2 3   # the coefficient matrix
