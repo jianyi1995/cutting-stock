@@ -1,0 +1,12 @@
+4     # the number of constraints
+2     # the number of variables
+2 3   # the coefficient matrix
+-3 2
+0 2
+2 1
+6     # the matrix of rhs
+3
+5
+4
+-4    # the matrix of coefficient in objective function multiply by -1
+-3
