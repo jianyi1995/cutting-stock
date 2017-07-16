@@ -18,6 +18,7 @@ class Simplex:
         self._a = a * t
         self._b = b * t
         self._c = c * t
+        self._solution = [n + i for i in range(m)]
 
     def create_tableau(self):
         tableau = [[0 for x in range(self._m + self._n + 1)] for y in range(self._m + 1)]
@@ -60,7 +61,6 @@ class Simplex:
             for j in range(self._m + self._n + 1):
                 tableau[i][j] = tableau[i][j] - tableau[row][j] * mul
         return tableau
-
 
 
 
