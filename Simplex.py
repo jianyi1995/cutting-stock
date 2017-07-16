@@ -14,9 +14,9 @@ class Simplex:
     def __init__(self, m, n, a, b, c, t=1):
         self._m = m
         self._n = n
-        self._a = a.copy() * t
-        self._b = b.copy * t
-        self._c = c.copy * t
+        self._a = a * t
+        self._b = b * t
+        self._c = c * t
         self._tableau = None
 
     def create_tableau(self):
