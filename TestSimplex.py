@@ -8,6 +8,7 @@ class TestSimplex(TestCase):
 
     def test_tableau(self):
         with open('text', 'r', encoding='utf-8') as f:
+            t = int(f.readline().split()[0])
             m = int(f.readline().split()[0])
             n = int(f.readline().split()[0])
             a = [[0 for x in range(n)] for y in range(m)]
@@ -21,13 +22,14 @@ class TestSimplex(TestCase):
             c = []
             for j in range(n):
                 c.append(Fraction(f.readline().split()[0]))
-        s = Simplex(m, n, a, b, c)
+        s = Simplex(m, n, a, b, c, t)
         result = [[2, 3, 1, 0, 0, 0, 6], [-3, 2, 0, 1, 0, 0, 3], [0, 2, 0, 0, 1, 0, 5],
                   [2, 1, 0, 0, 0, 1, 4], [-4, -3, 0, 0, 0, 0, 0]]
         self.assertEqual(s.create_tableau(), result)
 
     def test_get_pivot(self):
         with open('text', 'r', encoding='utf-8') as f:
+            t = int(f.readline().split()[0])
             m = int(f.readline().split()[0])
             n = int(f.readline().split()[0])
             a = [[0 for x in range(n)] for y in range(m)]
@@ -41,13 +43,14 @@ class TestSimplex(TestCase):
             c = []
             for j in range(n):
                 c.append(Fraction(f.readline().split()[0]))
-        s = Simplex(m, n, a, b, c)
+        s = Simplex(m, n, a, b, c, t)
         tableau = s.create_tableau()
         result = (3, 0)
         self.assertEqual(s.get_pivot(tableau), result)
 
     def test_pivot(self):
         with open('text', 'r', encoding='utf-8') as f:
+            t = int(f.readline().split()[0])
             m = int(f.readline().split()[0])
             n = int(f.readline().split()[0])
             a = [[0 for x in range(n)] for y in range(m)]
@@ -61,7 +64,7 @@ class TestSimplex(TestCase):
             c = []
             for j in range(n):
                 c.append(Fraction(f.readline().split()[0]))
-        s = Simplex(m, n, a, b, c)
+        s = Simplex(m, n, a, b, c, t)
         tableau = s.create_tableau()
         row, column = s.get_pivot(tableau)
         result = [[0, 2, 1, 0, 0, -1, 2], [0, Fraction(7, 2), 0, 1, 0, Fraction(3, 2), 9],
@@ -70,6 +73,7 @@ class TestSimplex(TestCase):
 
     def test_simplex(self):
         with open('text', 'r', encoding='utf-8') as f:
+            t = int(f.readline().split()[0])
             m = int(f.readline().split()[0])
             n = int(f.readline().split()[0])
             a = [[0 for x in range(n)] for y in range(m)]
@@ -83,7 +87,7 @@ class TestSimplex(TestCase):
             c = []
             for j in range(n):
                 c.append(Fraction(f.readline().split()[0]))
-        s = Simplex(m, n, a, b, c)
+        s = Simplex(m, n, a, b, c, t)
         res = s.simplex()
         exception = [Fraction(3, 2), 1]
         self.assertEqual(res, exception)
