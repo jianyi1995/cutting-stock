@@ -18,7 +18,6 @@ class Simplex:
         self._a = a * t
         self._b = b * t
         self._c = c * t
-        self._tableau = None
 
     def create_tableau(self):
         tableau = [[0 for x in range(self._m + self._n + 1)] for y in range(self._m + 1)]
@@ -29,20 +28,19 @@ class Simplex:
             tableau[i][self._m + self._n] = self._b[i]
         for j in range(self._n):
             tableau[self._m][j] = self._c[j]
-        self._tableau = tableau
         return tableau
 
-    def get_pivot(self):
-        column = self._tableau[self._m].index(min(self._tableau[self._m]))
-        if self._tableau[self._m][column] >= 0:
+    def get_pivot(self, tableau):
+        column = tableau[self._m].index(min(tableau[self._m]))
+        if tableau[self._m][column] >= 0:
             # column == -1 means the current solution is optimal
             column = -1
             row = -1
         else:
             tmp = []
             for i in range(self._m):
-                if self._tableau[i][column] > 0 and self._tableau[i][self._n + self._m] > 0:
-                    tmp.append(self._tableau[i][column] / self._tableau[i][self._m + self._n])
+                if tableau[i][column] > 0 and tableau[i][self._n + self._m] > 0:
+                    tmp.append(tableau[i][column] / tableau[i][self._m + self._n])
                 else:
                     tmp.append(0)
             row = tmp.index(max(tmp))
@@ -50,6 +48,21 @@ class Simplex:
                 # row == -1 means there is no feasible solution
                 row = -1
         return row, column
+
+    def pivot(self, tableau, row, column):
+        tmp = tableau[row][column]
+        for j in range(self._n + self._m + 1):
+            tableau[row][j] = Fraction(tableau[row][j], tmp)
+        for i in range(self._m + 1):
+            if i == row:
+                continue
+            mul = Fraction(tableau[i][column] / tableau[row][column])
+            for j in range(self.m + self._n + 1):
+                tableau[i][j] = tableau[i][j] - tableau[row][j] * mul
+        return tableau
+
+
+
 
 
 
