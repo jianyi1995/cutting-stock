@@ -1,6 +1,7 @@
 """
 this class using Simplex Algorithm to solve standard maximum linear problem
 for the minimum problem, we multiply -1 to responding coefficient
+I do not care about cycling and the whole b are negative
 """
 from fractions import Fraction
 
@@ -30,6 +31,25 @@ class Simplex:
             tableau[self._m][j] = self._c[j]
         self._tableau = tableau
         return tableau
+
+    def get_pivot(self):
+        column = self._tableau[self._m].index(min(self._tableau[self._m]))
+        if self._tableau[self._m][column] >= 0:
+            # column == -1 means the current solution is optimal
+            column = -1
+            row = -1
+        else:
+            tmp = []
+            for i in range(self._m):
+                if self._tableau[i][column] > 0 and self._tableau[i][self._n + self._m] > 0:
+                    tmp.append(self._tableau[i][column] / self._tableau[i][self._m + self._n])
+                else:
+                    tmp.append(0)
+            row = tmp.index(max(tmp))
+            if tmp[row] == 0:
+                # row == -1 means there is no feasible solution
+                row = -1
+        return row, column
 
 
 
