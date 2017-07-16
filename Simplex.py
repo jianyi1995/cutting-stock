@@ -15,20 +15,28 @@ class Simplex:
     def __init__(self, m, n, a, b, c, t=1):
         self._m = m
         self._n = n
-        self._a = a * t
-        self._b = b * t
-        self._c = c * t
+        self._a = a
+        self._b = b
+        self._c = c
+        self._t = t
         self._solution = [n + i for i in range(m)]
+        if min(b) < 0:
+            self._aux = 1
+        else:
+            self._aux = 0
 
     def create_tableau(self):
-        tableau = [[0 for x in range(self._m + self._n + 1)] for y in range(self._m + 1)]
+        tableau = [[0 for x in range(self._m + self._n + 1 + self._aux)] for y in range(self._m + 1)]
         for i in range(self._m):
             for j in range(self._n):
-                tableau[i][j] = self._a[i][j]
+                tableau[i][j] = self._a[i][j] * self._t
             tableau[i][i + j + 1] = 1
-            tableau[i][self._m + self._n] = self._b[i]
+            tableau[i][self._m + self._n + self._aux] = self._b[i] * self._t
         for j in range(self._n):
-            tableau[self._m][j] = self._c[j]
+            tableau[self._m][j] = self._c[j] * self._t
+        if self._aux:
+            for i in range(self._m + 1):
+                tableau[i][self._m + self._n] = -1
         return tableau
 
     def get_pivot(self, tableau):
