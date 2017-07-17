@@ -45,12 +45,13 @@ def create_tableau(m, n, a, b, c):
 
 
 def get_pivot(tableau, m, n):
-    column = tableau[m].index(min(tableau[m]))
+    column = tableau[m].index(min(tableau[m][:m + n]))
     if tableau[m][column] >= 0:
         # column == -1 means the current solution is optimal
         column = -1
         row = -1
     else:
+        first = 0
         tmp = []
         for i in range(m):
             if tableau[i][column] > 0 and tableau[i][n + m] > 0:
@@ -84,31 +85,22 @@ def min_to_max(m, n, a, b, c):
     for i in range(m):
         b[i] *= -1
     for j in range(n):
-        c *= -1
+        c[j] *= -1
 
 
-def solve(tableau, m, n, c, solution):
+def solve(tableau, m, n, solution):
     while True:
         row, column = get_pivot(tableau, m, n)
-        if column == -1:
-            print('get the optimal solution\n')
+        if column == -1 or row == -1:
             result = [0] * n
             for i in solution:
                 if i < n:
                     result[i] = tableau[solution.index(i)][n + m]
-            optimal = 0
-            for i in range(n):
-                optimal += c[i] * -1 * result[i]
-            print('optimal is %d' % optimal)
-            break
-        elif row == -1:
-            print('it is infeasible\n')
-            result = None
             break
         else:
             solution[row] = column
             pivot(tableau, row, column, m, n)
-    return result
+    return result, row, column
 
 
 def simplex(filename='test'):
@@ -116,17 +108,25 @@ def simplex(filename='test'):
     # if it is a min problem, do min_to_max
     if t == -1:
         min_to_max(m, n, a, b, c)
-    solution = [n + i for i in range(m)]
     if min(b) >= 0:
+        solution = [n + i for i in range(m)]
         tableau = create_tableau(m, n, a, b, c)
-        result = solve(tableau, m, n, c, solution)
+        result, row, column = solve(tableau, m, n, solution)
+        if column == -1:
+            print('get the optimal solution\n')
+            print('optimal is %d' % tableau[m][m + n])
+        else:
+            print('there is no feasible solution')
+            print(result)
+            print(solution)
+            result = None
     else:
+        solution = [n + i + 1 for i in range(m)]
         pre_a = a.copy()
         for i in range(m):
             pre_a[i] = [-1] + pre_a[i]
         pre_c = [0] * (n + 1)
         pre_c[0] = 1
-
         tableau = create_tableau(m, n + 1, pre_a, b, pre_c)
         cur_min = tableau[0][m + n + 1]
         cur_index = 0
@@ -137,13 +137,38 @@ def simplex(filename='test'):
         row = cur_index
         column = 0
         solution[row] = column
-        pivot(tableau, row, column)
-        result = solve(tableau, m, n + 1, pre_c)
-        # !TODO
+        pivot(tableau, row, column, m, n + 1)
+        result, row, column = solve(tableau, m, n + 1, solution)
         # 考虑三种情况，一是x0在基础解中且不为0，
         # 二是x0在基础解中且为0
         # 三是x0不在基础解中
-        if result:
-            if 0 in solution and solution[cur_index] == 0:
-                pass
+        if 0 in solution:
+            if result[solution.index(0)] != 0:
+                print('because of x0 is greater than 0, so no infeasible solution\n')
+                return None
+            else:
+                for i in range(1, n + 1):
+                    if i not in solution:
+                        row = solution.index(0)
+                        column = i
+                        pivot(tableau, row, column, m, n + 1)
+                        solution[row] = column
+                        break
+        for i in range(m):
+            solution[i] -= 1
+        for i in range(m + 1):
+            tableau[i].remove(tableau[i][0])
+        tmp = [0] * (m + n + 1)
+        c = c + [0] * (m + 1)
+        for i in range(m):
+            if solution[i] < n:
+                for j in range(m + n + 1):
+                    tmp[j] += -1 * c[solution[i]] * tableau[i][j]
+        for j in range(m + n + 1):
+            c[j] += tmp[j]
+            tableau[m][j] = c[j]
+        result, row, column = solve(tableau, m, n, solution)
+        print(result)
+        print(solution)
+        print(tableau)
     return result
