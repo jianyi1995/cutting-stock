@@ -4,6 +4,7 @@ for the minimum problem, we multiply -1 to responding coefficient
 I do not care about cycling and the whole b are negative
 """
 from fractions import Fraction
+import numpy as np
 
 
 # t means the type of problem, 1 means max, 0 means min
@@ -182,32 +183,26 @@ def solve_dual(result, m, n, a, b, c):
             unsolved.remove(i)
     # column means the number of variables
     column = len(unsolved)
-    tableau = []
     # 创建对偶的表
+    tableau = []
+    tmp_b = []
     for i in range(n):
         if result[i] != 0:
             tmp = []
             for dul_i in range(m):
                 if dul_i in unsolved:
-                    tmp.append(a[dul_i][i])
-            tmp.append(-1 * c[i])
+                    # because fraction is not the basic type in numpy
+                    # so I had to change it
+                    tmp.append(float(a[dul_i][i]))
+            tmp_b.append([float(-1 * c[i])])
             tableau.append(tmp)
-    row = len(tableau)
-    for i in range(row):
-        mul = tableau[i][i]
-        for j in range(column + 1):
-            tableau[i][j] = Fraction(tableau[i][j], mul)
-        for ii in range(row):
-            if ii == i:
-                continue
-            else:
-                mul = Fraction(tableau[ii][i])
-                for j in range(column + 1):
-                    tableau[ii][j] -= mul * tableau[i][j]
+    matrix_a = np.matrix(tableau)
+    matrix_b = np.matrix(tmp_b)
+    matrix_y = np.dot(matrix_a.getI(), matrix_b)
     dual_result = [0] * m
-    tableau_index = 0
+    index = 0
     for i in range(m):
         if i in unsolved:
-            dual_result[i] = tableau[tableau_index][column]
-            tableau_index += 1
+            dual_result[i] = matrix_y.A[index][0]
+            index += 1
     return dual_result
