@@ -170,29 +170,28 @@ def simplex(t, m, n, a, b, c):
     return result
 
 
-def sovle_dual(result, m, n, a, b, c):
-    unsovled = [i for i in range(m)]
+def solve_dual(result, m, n, a, b, c):
+    unsolved = [i for i in range(m)]
     for i in range(m):
         tmp = 0
         for j in range(n):
-            tmp += a[i][j] * result[i]
+            tmp += a[i][j] * result[j]
         # 根据互补对偶理论，如果原问题约束i 不bounding，那么对应的yi为0
         # 理解为这个yi已经解决了
-        if tmp != b:
-            unsovled.remove(i)
+        if tmp != b[i]:
+            unsolved.remove(i)
     # column means the number of variables
-    column = len(unsovled)
+    column = len(unsolved)
     tableau = []
     # 创建对偶的表
     for i in range(n):
         if result[i] != 0:
             tmp = []
             for dul_i in range(m):
-                if dul_i in unsovled:
+                if dul_i in unsolved:
                     tmp.append(a[dul_i][i])
             tmp.append(-1 * c[i])
             tableau.append(tmp)
-    print(tableau)
     row = len(tableau)
     for i in range(row):
         mul = tableau[i][i]
@@ -204,13 +203,11 @@ def sovle_dual(result, m, n, a, b, c):
             else:
                 mul = Fraction(tableau[ii][i])
                 for j in range(column + 1):
-                    tableau[ii][j] -= mul * tableau[ii][j]
+                    tableau[ii][j] -= mul * tableau[i][j]
     dual_result = [0] * m
     tableau_index = 0
     for i in range(m):
-        if i in unsovled:
-            dual_result.append(tableau[tableau_index][column])
+        if i in unsolved:
+            dual_result[i] = tableau[tableau_index][column]
             tableau_index += 1
-        else:
-            dual_result.append(0)
     return dual_result

@@ -5,7 +5,6 @@ from fractions import Fraction
 
 
 class TestSimplex(TestCase):
-
     def test_tableau(self):
         t, m, n, a, b, c = read_model('text')
         result = [[2, 3, 1, 0, 0, 0, 6], [-3, 2, 0, 1, 0, 0, 3], [0, 2, 0, 0, 1, 0, 5],
@@ -49,5 +48,20 @@ class TestSimplex(TestCase):
         res = simplex(t, m, n, a, b, c)
         exception = [0, Fraction(3, 2), 0]
         self.assertEqual(res, exception)
+
+    def test_max_dual(self):
+        t, m, n, a, b, c = read_model('test_max')
+        res = simplex(t, m, n, a, b, c)
+        dual_res = solve_dual(res, m, n, a, b, c)
+        exception = [1, 0, 0]
+        self.assertEqual(dual_res, exception)
+
+    def test_min_dual(self):
+        t, m, n, a, b, c = read_model('test_min')
+        res = simplex(t, m, n, a, b, c)
+        dual_res = solve_dual(res, m, n, a, b, c)
+        exception = [1, Fraction(1, 2), 0]
+        self.assertEqual(dual_res, exception)
+
 if __name__ == '__main__':
     main()
