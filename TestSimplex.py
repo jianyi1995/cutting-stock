@@ -27,22 +27,26 @@ class TestSimplex(TestCase):
         self.assertEqual(pivot(tableau, row, column, m, n), result)
 
     def test_simplex(self):
-        res = simplex('text')
+        t, m, n, a, b, c = read_model('text')
+        res = simplex(t, m, n, a, b, c)
         exception = [Fraction(3, 2), 1]
         self.assertEqual(res, exception)
 
     def test_simplex_min(self):
-        res = simplex('test_min')
+        t, m, n, a, b, c = read_model('test_min')
+        res = simplex(t, m, n, a, b, c)
         exception = [0, 2, 1]
         self.assertEqual(res, exception)
 
     def test_simplex_max(self):
-        res = simplex('test_max')
+        t, m, n, a, b, c = read_model('test_max')
+        res = simplex(t, m, n, a, b, c)
         exception = [7, 0, 0, 3]
         self.assertEqual(res, exception)
 
     def test_simplex_min_without_bless0(self):
-        res = simplex('test_min_without_b<0')
+        t, m, n, a, b, c = read_model('test_min_without_b<0')
+        res = simplex(t, m, n, a, b, c)
         exception = [0, Fraction(3, 2), 0]
         self.assertEqual(res, exception)
 if __name__ == '__main__':

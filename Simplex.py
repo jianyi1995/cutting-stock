@@ -103,8 +103,7 @@ def solve(tableau, m, n, solution):
     return result, row, column
 
 
-def simplex(filename='test'):
-    t, m, n, a, b, c = read_model(filename)
+def simplex(t, m, n, a, b, c):
     # if it is a min problem, do min_to_max
     if t == -1:
         min_to_max(m, n, a, b, c)
@@ -159,16 +158,59 @@ def simplex(filename='test'):
         for i in range(m + 1):
             tableau[i].remove(tableau[i][0])
         tmp = [0] * (m + n + 1)
-        c = c + [0] * (m + 1)
+        pre_c = c + [0] * (m + 1)
         for i in range(m):
             if solution[i] < n:
                 for j in range(m + n + 1):
-                    tmp[j] += -1 * c[solution[i]] * tableau[i][j]
+                    tmp[j] += -1 * pre_c[solution[i]] * tableau[i][j]
         for j in range(m + n + 1):
-            c[j] += tmp[j]
-            tableau[m][j] = c[j]
+            pre_c[j] += tmp[j]
+            tableau[m][j] = pre_c[j]
         result, row, column = solve(tableau, m, n, solution)
-        print(result)
-        print(solution)
-        print(tableau)
     return result
+
+
+def sovle_dual(result, m, n, a, b, c):
+    unsovled = [i for i in range(m)]
+    for i in range(m):
+        tmp = 0
+        for j in range(n):
+            tmp += a[i][j] * result[i]
+        # 根据互补对偶理论，如果原问题约束i 不bounding，那么对应的yi为0
+        # 理解为这个yi已经解决了
+        if tmp != b:
+            unsovled.remove(i)
+    # column means the number of variables
+    column = len(unsovled)
+    tableau = []
+    # 创建对偶的表
+    for i in range(n):
+        if result[i] != 0:
+            tmp = []
+            for dul_i in range(m):
+                if dul_i in unsovled:
+                    tmp.append(a[dul_i][i])
+            tmp.append(-1 * c[i])
+            tableau.append(tmp)
+    print(tableau)
+    row = len(tableau)
+    for i in range(row):
+        mul = tableau[i][i]
+        for j in range(column + 1):
+            tableau[i][j] = Fraction(tableau[i][j], mul)
+        for ii in range(row):
+            if ii == i:
+                continue
+            else:
+                mul = Fraction(tableau[ii][i])
+                for j in range(column + 1):
+                    tableau[ii][j] -= mul * tableau[ii][j]
+    dual_result = [0] * m
+    tableau_index = 0
+    for i in range(m):
+        if i in unsovled:
+            dual_result.append(tableau[tableau_index][column])
+            tableau_index += 1
+        else:
+            dual_result.append(0)
+    return dual_result
