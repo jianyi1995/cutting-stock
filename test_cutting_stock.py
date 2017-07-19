@@ -35,6 +35,7 @@ class TestSimplex(TestCase):
         w = [9, 8, 7, 6]
         n = [511, 301, 263, 383]
         result = cutting_stock(w, n, capacity)
-        print(result)
+        exception = [Fraction(511, 2), Fraction(701, 8), 0, 0, Fraction(263, 2), Fraction(503, 4)]
+        self.assertEqual(result, exception)
 if __name__ == '__main__':
     main()

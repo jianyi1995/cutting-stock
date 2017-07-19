@@ -5,6 +5,7 @@ this problem will return two lists with the cutting patterns and number of them
 """
 from Simplex import *
 from knapsack import *
+import math
 
 
 def copy_two_dimension_list(l):
@@ -30,7 +31,17 @@ def cutting_stock(w, n, capacity):
         dual_result = solve_dual(result, row, column, aa, nn, cc)
         value, new_column = column_generation(dual_result, capacity, w)
         if abs(value - 1) < 1e-6:
-            print(a)
+            count = 0
+            for j in range(column):
+                if result[j]:
+                    pattern = []
+                    for i in range(row):
+                        pattern.append(a[i][j])
+                    print('using column:')
+                    print(pattern)
+                    print('%d times' % math.ceil(result[j]))
+                    count += math.ceil(result[j])
+            print('the number of rolls is %d' % count)
             return result
         else:
             for i in range(row):
