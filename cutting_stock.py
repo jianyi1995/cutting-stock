@@ -20,7 +20,8 @@ def copy_two_dimension_list(l):
 def cutting_stock(w, n, capacity):
     a = get_initial_solution(w, capacity)
     row = column = len(w)
-    c = [1] * column
+    # c is -1 * the c in expression
+    c = [-1] * column
     while True:
         aa = copy_two_dimension_list(a)
         nn = n.copy()
@@ -28,12 +29,14 @@ def cutting_stock(w, n, capacity):
         result = simplex(-1, row, column, aa, nn, cc)
         dual_result = solve_dual(result, row, column, aa, nn, cc)
         value, new_column = column_generation(dual_result, capacity, w)
-        if value < 1:
+        if abs(value - 1) < 1e-6:
+            print(a)
             return result
         else:
             for i in range(row):
-                a[i] += new_column[i]
+                a[i] = a[i] + [new_column[i]]
             column += 1
+            c = c + [-1]
 
 
 def get_initial_solution(w, capacity):
@@ -44,8 +47,13 @@ def get_initial_solution(w, capacity):
     return patterns
 
 
-
-
 def column_generation(dual_solution, capacity, w):
     value, decision = knapsack(w, dual_solution, capacity)
     return value, decision
+
+
+if __name__ == '__main__':
+    capacity = 20
+    w = [9, 8, 7, 6]
+    n = [511, 301, 263, 383]
+    result = cutting_stock(w, n, capacity)

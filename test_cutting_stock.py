@@ -24,8 +24,9 @@ class TestSimplex(TestCase):
              [0, 0, 0, 3]]
         aa = copy_two_dimension_list(a)
         nn = n.copy()
-        result = simplex(-1, 4, 4, aa, nn, [1, 1, 1, 1])
-        dual = solve_dual(result, 4, 4, aa, nn, [1, 1, 1, 1])
+        c = [-1, -1, -1, -1]
+        result = simplex(-1, 4, 4, aa, nn, c)
+        dual = solve_dual(result, 4, 4, aa, nn, c)
         value, decision = knapsack(w, dual, capacity)
         self.assertEqual(decision, [0, 0, 2, 1])
 
@@ -33,10 +34,6 @@ class TestSimplex(TestCase):
         capacity = 20
         w = [9, 8, 7, 6]
         n = [511, 301, 263, 383]
-        a = [[2, 0, 0, 0],
-             [0, 2, 0, 0],
-             [0, 0, 2, 0],
-             [0, 0, 0, 3]]
         result = cutting_stock(w, n, capacity)
         print(result)
 if __name__ == '__main__':
