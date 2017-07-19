@@ -20,13 +20,20 @@ def copy_two_dimension_list(l):
 def cutting_stock(w, n, capacity):
     a = get_initial_solution(w, capacity)
     row = column = len(w)
-    c = [1] * n
+    c = [1] * column
     while True:
         aa = copy_two_dimension_list(a)
         nn = n.copy()
         cc = c.copy()
         result = simplex(-1, row, column, aa, nn, cc)
         dual_result = solve_dual(result, row, column, aa, nn, cc)
+        value, new_column = column_generation(dual_result, capacity, w)
+        if value < 1:
+            return result
+        else:
+            for i in range(row):
+                a[i] += new_column[i]
+            column += 1
 
 
 def get_initial_solution(w, capacity):
@@ -37,14 +44,6 @@ def get_initial_solution(w, capacity):
     return patterns
 
 
-def price(a, c, dual_solution):
-    new_c = []
-    for j in range(len(c)):
-        tmp = 0
-        for i in range(len(a)):
-            tmp += dual_solution[i] * a[i][j]
-        new_c.append(1 - tmp)
-    return new_c
 
 
 def column_generation(dual_solution, capacity, w):
