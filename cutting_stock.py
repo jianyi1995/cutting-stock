@@ -4,6 +4,7 @@ cutting stock problem: there is m orders and their widths are stored in list w
 this problem will return two lists with the cutting patterns and number of them 
 """
 from Simplex import *
+from knapsack import *
 
 
 def copy_two_dimension_list(l):
@@ -22,8 +23,8 @@ def cutting_stock(w, n, capacity):
     c = [1] * n
     while True:
         aa = copy_two_dimension_list(a)
-        nn = copy_two_dimension_list(n)
-        cc = copy_two_dimension_list(c)
+        nn = n.copy()
+        cc = c.copy()
         result = simplex(-1, row, column, aa, nn, cc)
         dual_result = solve_dual(result, row, column, aa, nn, cc)
 
@@ -44,3 +45,8 @@ def price(a, c, dual_solution):
             tmp += dual_solution[i] * a[i][j]
         new_c.append(1 - tmp)
     return new_c
+
+
+def column_generation(dual_solution, capacity, w):
+    value, decision = knapsack(w, dual_solution, capacity)
+    return value, decision
