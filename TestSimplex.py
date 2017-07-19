@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest import main
-from Simplex import *
+from .Simplex.Simplex import *
 from fractions import Fraction
 
 
