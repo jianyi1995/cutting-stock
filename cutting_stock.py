@@ -3,9 +3,10 @@ cutting stock problem: there is m orders and their widths are stored in list w
 ,their demand are stored in list n and the total width of the paper capacity
 this problem will return two lists with the cutting patterns and number of them 
 """
-from Simplex import *
-from knapsack import *
 import math
+
+from simplex.Simplex import *
+from knapsack.knapsack import *
 
 
 def copy_two_dimension_list(l):

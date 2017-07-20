@@ -1,6 +1,7 @@
 from unittest import TestCase
 from unittest import main
 from cutting_stock import *
+from knapsack.knapsack import knapsack
 
 
 class TestSimplex(TestCase):
@@ -37,5 +38,7 @@ class TestSimplex(TestCase):
         result = cutting_stock(w, n, capacity)
         exception = [Fraction(511, 2), Fraction(701, 8), 0, 0, Fraction(263, 2), Fraction(503, 4)]
         self.assertEqual(result, exception)
+
+
 if __name__ == '__main__':
     main()

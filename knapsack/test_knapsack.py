@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest import main
-from knapsack import *
+from knapsack.knapsack import *
 
 
 class TestSimplex(TestCase):

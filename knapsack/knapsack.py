@@ -1,11 +1,11 @@
-'''
+"""
 w means the weight of each item
 v means the value of each item
 capacity means the total weight of the knapsack
 
 value_table[i] means the maximum value we can get after using weight i of the knapsack
 decision_table means the number of each item we choose
-'''
+"""
 
 
 def knapsack(w, v, capacity):
