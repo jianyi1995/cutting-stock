@@ -114,11 +114,13 @@ def simplex(t, m, n, a, b, c):
         if column == -1:
             print('get the optimal solution\n')
             print('optimal is %d' % tableau[m][m + n])
+            optimal = tableau[m][m + n]
         else:
             print('there is no feasible solution')
             print(result)
             print(solution)
             result = None
+            optimal = None
     else:
         solution = [n + i + 1 for i in range(m)]
         pre_a = a.copy()
@@ -166,8 +168,11 @@ def simplex(t, m, n, a, b, c):
         for j in range(m + n + 1):
             pre_c[j] += tmp[j]
             tableau[m][j] = pre_c[j]
+        optimal = tableau[m][m + n]
+        tableau[m][m + n] = 0
         result, row, column = solve(tableau, m, n, solution)
-    return result
+        optimal += tableau[m][m + n]
+    return result, optimal
 
 
 def solve_dual(result, m, n, a, b, c):
