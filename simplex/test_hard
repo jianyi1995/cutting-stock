@@ -1,0 +1,12 @@
+1     # 1 means max, -1 means min
+3     # the number of constraints
+3     # the number of variables
+1 2 2   # the coefficient matrix
+-3 0 1
+-2 -1 0
+1    # the matrix of rhs
+-1
+-1
+-3    # the matrix of coefficient in objective function multiply by -1
+-4
+-5

@@ -52,15 +52,14 @@ def get_pivot(tableau, m, n):
         column = -1
         row = -1
     else:
-        first = 0
         tmp = []
         for i in range(m):
-            if tableau[i][column] > 0 and tableau[i][n + m] > 0:
-                tmp.append(tableau[i][column] / tableau[i][m + n])
+            if tableau[i][column] > 0:
+                tmp.append(tableau[i][m + n] / tableau[i][column])
             else:
-                tmp.append(0)
-        row = tmp.index(max(tmp))
-        if tmp[row] == 0:
+                tmp.append(10000000000000000)
+        row = tmp.index(min(tmp))
+        if tmp[row] == 10000000000000000:
             # row == -1 means there is no feasible solution
             row = -1
     return row, column

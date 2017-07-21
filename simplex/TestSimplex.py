@@ -65,6 +65,15 @@ class TestSimplex(TestCase):
         exception = [1, Fraction(1, 2), 0]
         self.assertEqual(dual_res, exception)
 
+    def test_hard(self):
+        t, m, n, a, b, c = read_model('./simplex/test_hard')
+        res = simplex(t, m, n, a, b, c)
+        exception = [1, 0, 0]
+        dual_res = solve_dual(res, m, n, a, b, c)
+        dual_exception = [3, 0, 0]
+        self.assertEqual(res, exception)
+        self.assertEqual(dual_res, dual_exception)
+
 
 if __name__ == '__main__':
     main()
