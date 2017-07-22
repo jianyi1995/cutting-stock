@@ -148,9 +148,9 @@ def simplex(t, m, n, a, b, c):
                 print('because of x0 is greater than 0, so no infeasible solution\n')
                 return None
             else:
+                row = solution.index(0)
                 for i in range(1, n + 1):
-                    if i not in solution:
-                        row = solution.index(0)
+                    if i not in solution and tableau[row][i] > 0:
                         column = i
                         pivot(tableau, row, column, m, n + 1)
                         solution[row] = column
@@ -172,7 +172,7 @@ def simplex(t, m, n, a, b, c):
         tableau[m][m + n] = 0
         result, row, column = solve(tableau, m, n, solution)
         optimal += tableau[m][m + n]
-    return result, optimal
+    return result, optimal * t
 
 
 def solve_dual(result, m, n, a, b, c):

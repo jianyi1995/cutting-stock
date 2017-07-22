@@ -29,10 +29,11 @@ def cutting_stock(w, n, capacity):
         nn = n.copy()
         cc = c.copy()
         result = simplex(-1, row, column, aa, nn, cc)
-        dual_result = solve_dual(result, row, column, aa, nn, cc)
+        dual_result = solve_dual(result[0], row, column, aa, nn, cc)
         value, new_column = column_generation(dual_result, capacity, w)
-        if abs(value - 1) < 1e-6:
+        if 1 - value >= -1e-6:
             count = 0
+            result = result[0]
             for j in range(column):
                 if result[j]:
                     pattern = []
@@ -62,10 +63,3 @@ def get_initial_solution(w, capacity):
 def column_generation(dual_solution, capacity, w):
     value, decision = knapsack(w, dual_solution, capacity)
     return value, decision
-
-
-if __name__ == '__main__':
-    capacity = 20
-    w = [9, 8, 7, 6]
-    n = [511, 301, 263, 383]
-    result = cutting_stock(w, n, capacity)
