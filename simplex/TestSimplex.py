@@ -76,6 +76,66 @@ class TestSimplex(TestCase):
         self.assertEqual(dual_res, dual_exception)
         self.assertEqual(res[1], 3)
 
+    def test_1(self):
+        a = [[1, -1, -2, -1],
+             [2, 0, 1, -4],
+             [-2, 1, 0, 1]]
+        b = [4, 2, 1]
+        c = [-1, 2, 3, 1]
+        t = 1
+        exception = [7, 0, 0, 3]
+        optimal = 4
+        s = simplex(t, 3, 4, a, b, c)
+        dual_exception = [1, 0, 0]
+        dual = solve_dual(s[0], 3, 4, a, b, c)
+        self.assertEqual(exception, s[0])
+        self.assertEqual(optimal, s[1])
+        self.assertEqual(dual_exception, dual)
+
+    def test_2(self):
+        a = [[2, -1, 1],
+             [1, 0, 2],
+             [-7, 4, -6]]
+        b = [-1, 2, 1]
+        c = [-3, 1, -2]
+        t = -1
+        exception = [0, 2, 1]
+        optimal = 0
+        s = simplex(t, 3, 3, a, b, c)
+        dual = solve_dual(s[0], 3, 3, a, b, c)
+        dual_exception = [1, 0.5, 0]
+        self.assertEqual(exception, s[0])
+        self.assertEqual(optimal, s[1])
+        self.assertEqual(dual_exception, dual)
+
+    def test_5(self):
+        a = [[-1, -2, 0],
+             [4, 1, 7],
+             [2, -3, 1]]
+        b = [-3, -1, -5]
+        c = [0, 2, -1]
+        t = -1
+        exception = [0, 1.5, 0]
+        s = simplex(t, 3, 3, a, b, c)
+        dual = solve_dual(s[0], 3, 3, a, b, c)
+        dual_exception = [1, 0, 0]
+        self.assertEqual(exception, s[0])
+        self.assertEqual(dual_exception, dual)
+
+    def test_6(self):
+        a = [[1, 2, 2],
+             [-3, 0, 1],
+             [-2, -1, 0]]
+        b = [1, -1, -1]
+        c = [-3, -4, -5]
+        t = 1
+        exception = [1, 0, 0]
+        s = simplex(t, 3, 3, a, b, c)
+        dual = solve_dual(s[0], 3, 3, a, b, c)
+        dual_exception = [3, 0, 0]
+        self.assertEqual(exception, s[0])
+        self.assertEqual(dual_exception, dual)
+
 
 if __name__ == '__main__':
     main()
