@@ -35,7 +35,7 @@ class TestSimplex(TestCase):
         capacity = 20
         w = [9, 8, 7, 6]
         n = [511, 301, 263, 383]
-        result = cutting_stock(w, n, capacity)
+        result = new_cutting_stock(w, n, capacity)
         exception = [Fraction(511, 2), Fraction(701, 8), 0, 0, Fraction(263, 2), Fraction(503, 4)]
         self.assertEqual(result, exception)
 
@@ -43,7 +43,7 @@ class TestSimplex(TestCase):
         capacity = 5600
         w = [1380, 1520, 1560, 1710, 1820, 1880, 1930, 2000, 2050, 2100, 2140, 2150, 2200]
         n = [22, 25, 12, 14, 18, 18, 20, 10, 12, 14, 16, 18, 20]
-        result = cutting_stock(w, n, capacity)
+        result = new_cutting_stock(w, n, capacity)
         print(result)
 
 
