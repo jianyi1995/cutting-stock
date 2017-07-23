@@ -14,8 +14,10 @@ class TestSolver(TestCase):
         exception = [7, 0, 0, 3]
         optimal = 4
         s = solver(a, b, c, t)
+        dual_exception = [1, 0, 0]
         self.assertEqual(exception, s[0])
         self.assertEqual(optimal, s[1])
+        self.assertEqual(dual_exception, s[2])
 
     def test_2(self):
         a = [[2, -1, 1],
@@ -27,8 +29,10 @@ class TestSolver(TestCase):
         exception = [0, 2, 1]
         optimal = 0
         s = solver(a, b, c, t)
+        dual_exception = [1, 0.5, 0]
         self.assertEqual(exception, s[0])
         self.assertEqual(optimal, s[1])
+        self.assertEqual(dual_exception, s[2])
 
     def test_3(self):
         a = [[-3, 3, 1],
@@ -59,7 +63,9 @@ class TestSolver(TestCase):
         t = -1
         exception = [0, 1.5, 0]
         s = solver(a, b, c, t)
+        dual_exception = [1, 0, 0]
         self.assertEqual(exception, s[0])
+        self.assertEqual(dual_exception, s[2])
 
     def test_6(self):
         a = [[1, 2, 2],
@@ -70,7 +76,9 @@ class TestSolver(TestCase):
         t = 1
         exception = [1, 0, 0]
         s = solver(a, b, c, t)
+        dual_exception = [3, 0, 0]
         self.assertEqual(exception, s[0])
+        self.assertEqual(dual_exception, s[2])
 
 
 if __name__ == '__main__':

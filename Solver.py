@@ -26,14 +26,18 @@ def solver(a, b, c, t):
     m.update()
     m.optimize()
     result = []
+    dual = []
     if m.status == GRB.OPTIMAL:
-        x = m.getAttr('x', variables)
+        x = m.getAttr('x')
+        cons = m.getConstrs()
         for tmp in x:
             result.append(tmp)
+        for i in range(len(b)):
+            dual.append(cons[i].getAttr('Pi'))
     elif m.status == GRB.INFEASIBLE:
         return 'infeasible'
     elif m.status == GRB.UNBOUNDED:
         return 'unbounded'
     elif m.status == GRB.INF_OR_UNBD:
         return ['infeasible', 'unbounded']
-    return result, m.objVal
+    return result, m.objVal, dual
